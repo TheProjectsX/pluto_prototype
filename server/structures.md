@@ -11,6 +11,10 @@
 
 ## Response Structure from a Intent Function
 
+Intent Functions will return an Array of Response. As we don't want to use the Message send feature in every intent function, intent Functions will return Array / List of response. That way, more than one command (ex: speak + execute) will be sent to the client separately.
+
+## [{}] ->
+
 -   ### `key` (str)
     > This contains the name Command that the Client is required to perform. Caller function will get the required codes and commands of this Command Name
 -   ### `perform` (str) [!]

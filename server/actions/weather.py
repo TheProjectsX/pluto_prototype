@@ -26,14 +26,16 @@ def get_weather(entities: list = []) -> dict:
     sunrise = datetime.fromtimestamp(response["sys"]["sunrise"]).strftime("%I:%M %p")
     sunset = datetime.fromtimestamp(response["sys"]["sunset"]).strftime("%I:%M %p")
 
-    return_response = {
-        "key": "SPEAK",
-        "perform": "text_processing",
-        "text": (
-            f"The weather in {location} is currently {description} with a temperature of {temp_celsius}°C. "
-            f"Humidity is at {humidity}% and wind speed is {wind_speed} m/s. "
-            f"Sunrise was at {sunrise} and sunset will be at {sunset}."
-        ),
-    }
+    return_response = [
+        {
+            "key": "SPEAK",
+            "perform": "text_processing",
+            "text": (
+                f"The weather in {location} is currently {description} with a temperature of {temp_celsius}°C. "
+                f"Humidity is at {humidity}% and wind speed is {wind_speed} m/s. "
+                f"Sunrise was at {sunrise} and sunset will be at {sunset}."
+            ),
+        }
+    ]
 
     return return_response

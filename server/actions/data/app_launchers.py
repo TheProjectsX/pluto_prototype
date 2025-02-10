@@ -7,4 +7,8 @@ PC_LAUNCHERS = {
 
 
 # Commands to Launch Apps in Mobile
-MOBILE_LAUNCHERS = {}
+MOBILE_LAUNCHERS = {
+    "whatsapp": "com.whatsapp/.Main",
+    "lite": "com.facebook.lite/.MainActivity",
+    "chrome": "com.google.android.apps.chrome/.Main",
+}

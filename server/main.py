@@ -10,10 +10,10 @@ from utils.text_processing import format_response
 
 
 # Intent Function Runner
-def run_intent_function(intent_function: Callable, entities: list[dict]) -> dict:
+def run_intent_function(intent_function: Callable, entities: list[dict]) -> list:
     """Run an intent function with the given entities."""
     try:
-        intent_function_response = intent_function(entities)
+        intent_function_response: list[dict] = intent_function(entities)
     except Exception as e:
         return {
             "response_code": RESPONSE_CODES.get("SPEAK"),
@@ -22,20 +22,21 @@ def run_intent_function(intent_function: Callable, entities: list[dict]) -> dict
             "error": str(e),
         }
 
-    if intent_function_response.get("perform") == "text_processing":
-        intent_function_response["text"] = format_response(
-            intent_function_response.get("text")
+    return_response: list[dict] = []
+
+    for response in intent_function_response:
+        if response.get("perform") == "text_processing":
+            response["text"] = format_response(response.get("text"))
+
+        return_response.append(
+            {
+                "response_code": RESPONSE_CODES.get(response.get("key")),
+                "command": RESPONSE_COMMANDS.get(response.get("key")),
+                **{k: v for k, v in response.items() if k not in EXCLUDE_RESPONSE_KEYS},
+            }
         )
 
-    return {
-        "response_code": RESPONSE_CODES.get(intent_function_response.get("key")),
-        "command": RESPONSE_COMMANDS.get(intent_function_response.get("key")),
-        **{
-            k: v
-            for k, v in intent_function_response.items()
-            if k not in EXCLUDE_RESPONSE_KEYS
-        },
-    }
+    return return_response
 
 
 while True:
@@ -51,11 +52,12 @@ while True:
     if not intent_function:
         print(f"\nError: {intentInfo.get("intent")} Intent Function not Found!")
 
-    intent_function_response = run_intent_function(
+    intent_function_response: list[dict] = run_intent_function(
         intent_function, intentInfo.get("entities")
     )
 
-    print("\nIntent Response:", intent_function_response)
+    for response in intent_function_response:
+        print("\nIntent Response:", response)
 
 # Test Intent
 # while True:
