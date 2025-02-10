@@ -1,3 +1,14 @@
+## Intents List
+
+-   weather
+-   open_app_or_web
+-   chat_response [!]
+
+## Action Functions
+
+-   Intent's Action Function's file has the same name as intent (ex: Intent `weather` > `weather.py`)
+-   The main Function of that Intent's Action contains almost same name as the Intent but contains a `get_` suffix (ex: Intent `weather` > `weather.py` > `get_weather` function)
+
 ## Response Structure from a Intent Function
 
 -   ### `key` (str)

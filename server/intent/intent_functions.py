@@ -1,17 +1,15 @@
 # Dictionary Containing Intent and Action Functions
 from typing import Callable
+import importlib.util
 
-# Functions to handle intent and action
-from actions.weather import get_weather
-
-
-INTENT_FUNCTIONS = {
-    "get_weather": get_weather,
-    "open_app_or_web": None,
-    "chat_response": None,
-}
+# Intent Action Functions root folder
+ACTION_ROOT = "actions"
 
 
 # Function that Returns the Action Function to run based on the intent
 def get_intent_function(intent: str) -> Callable:
-    return INTENT_FUNCTIONS.get(intent)
+    if not importlib.util.find_spec(f"{ACTION_ROOT}.{intent}"):
+        return None
+
+    module = importlib.import_module(f"{ACTION_ROOT}.{intent}")
+    return getattr(module, f"get_{intent}")
