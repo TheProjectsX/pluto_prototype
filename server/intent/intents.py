@@ -20,6 +20,7 @@ class IntentInfo(TypedDict):
     success: bool
     error: str
     intent: str
+    text: str
     entities: EntityInfo
 
 
@@ -44,4 +45,9 @@ def get_intent(text: str) -> IntentInfo:
 
             entities.append({"name": name, "value": value})
 
-    return {"success": True, "intent": intent, "entities": entities}
+    return {
+        "success": True,
+        "intent": intent,
+        "text": response.get("text"),
+        "entities": entities,
+    }

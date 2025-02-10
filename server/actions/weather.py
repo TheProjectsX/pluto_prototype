@@ -4,11 +4,11 @@ import requests
 
 
 # Function to Get Weather from a Location or W/O Location
-def get_weather(entities: list = []) -> dict:
+def get_weather(properties: dict = {}) -> list[dict]:
     location = os.getenv("USER_CITY")
 
     # Set the value of location entity
-    for entity in entities:
+    for entity in properties.get("entities", []):
         if entity["name"] == "location":
             location = entity["value"]
             break

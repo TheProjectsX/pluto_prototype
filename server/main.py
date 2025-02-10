@@ -10,17 +10,19 @@ from utils.text_processing import format_response
 
 
 # Intent Function Runner
-def run_intent_function(intent_function: Callable, entities: list[dict]) -> list:
+def run_intent_function(intent_function: Callable, properties: dict) -> list:
     """Run an intent function with the given entities."""
     try:
-        intent_function_response: list[dict] = intent_function(entities)
+        intent_function_response: list[dict] = intent_function(properties)
     except Exception as e:
-        return {
-            "response_code": RESPONSE_CODES.get("SPEAK"),
-            "command": RESPONSE_COMMANDS.get("SPEAK"),
-            "text": "Sorry sir, An Error Occurred during the execution of your Command",
-            "error": str(e),
-        }
+        return [
+            {
+                "response_code": RESPONSE_CODES.get("SPEAK"),
+                "command": RESPONSE_COMMANDS.get("SPEAK"),
+                "text": "Sorry sir, An Error Occurred during the execution of your Command",
+                "error": str(e),
+            }
+        ]
 
     return_response: list[dict] = []
 
@@ -43,6 +45,8 @@ while True:
     text = input("\n:> ")
     if text == "exit":
         break
+    elif text.strip() == "":
+        continue
 
     intentInfo = get_intent(text)
     if not intentInfo.get("success"):
@@ -53,22 +57,8 @@ while True:
         print(f"\nError: {intentInfo.get("intent")} Intent Function not Found!")
 
     intent_function_response: list[dict] = run_intent_function(
-        intent_function, intentInfo.get("entities")
+        intent_function, intentInfo
     )
 
     for response in intent_function_response:
         print("\nIntent Response:", response)
-
-# Test Intent
-# while True:
-#     text = input("\n:> ")
-#     intentInfo = get_intent(text)
-
-#     if intentInfo["success"]:
-#         print("\nIntent:", intentInfo["intent"])
-#         print(
-#             "Entities:",
-#             ", ".join([x["name"] + " - " + x["value"] for x in intentInfo["entities"]]),
-#         )
-#     else:
-#         print("\nError:", intentInfo["error"])
