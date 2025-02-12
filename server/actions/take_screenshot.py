@@ -5,14 +5,32 @@ def get_take_screenshot(properties: dict = {}):
 
         filename = f"C:/Users/User/Pictures/Screenshots/Screenshot {datetime.now().strftime('%Y-%m-%d %H%M%S')}.png"
 
-        # Regular ScreenShot
-        return_response = [
-            {"key": "SPEAK", "text": "Taking ScreenShot"},
-            {
-                "key": "EXEC",
-                "exec": f"""import pyautogui\nss=pyautogui.screenshot('{filename}')""",
-            },
-        ]
+        if (len(properties.get("entities", [])) > 0) and (
+            any(
+                [
+                    x.get("name") in ["app_or_web", "ss_window"]
+                    for x in properties.get("entities", [])
+                ]
+            )
+        ):
+            return_response = [
+                {"key": "SPEAK", "text": "Taking ScreenShot"},
+                {
+                    "key": "FUNC",
+                    "func": "take_screenshot",
+                    "window": properties.get("entities", [])[0].get("value", "window"),
+                },
+            ]
+
+        else:
+            # Regular ScreenShot
+            return_response = [
+                {"key": "SPEAK", "text": "Taking ScreenShot"},
+                {
+                    "key": "EXEC",
+                    "exec": f"""import pyautogui\nss=pyautogui.screenshot('{filename}')""",
+                },
+            ]
     elif properties.get("platform", "pc") == "android":
         return_response = [
             {
