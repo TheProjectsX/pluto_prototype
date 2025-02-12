@@ -22,4 +22,5 @@ WEBSITE_URLS = {
     "telegram": "https://web.telegram.org",
     "github": "https://github.com",
     "chatgpt": "https://chatgpt.com",
+    "youtube": "https://www.youtube.com",
 }
